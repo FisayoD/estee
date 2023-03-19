@@ -14,49 +14,66 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { useNavigation } from "@react-navigation/native";
-import { app } from "../../firebase";
+import { app, auth} from "../../firebase";
+
 
 const LoginScreen = () => {
-  const auth = getAuth();
-  const [user, setUser] = useState('');
+  // const auth = getAuth(app);
+  const [user, setUser] = useState("");
   const [value, setValue] = React.useState({
     email: "",
     password: "",
     error: "",
   });
-
+  const navigation = useNavigation();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setUser(user);
       } else {
-       
         setUser(undefined);
       }
     });
     return unsubscribe;
   }, []);
-  // console.log(user);
 
   async function handleSignUp() {
-    // if (value.email === '' || value.password === '') {
-    //   setValue({
-    //     ...value,
-    //     error: 'Email and password are mandatory.'
-    //   })
-    //   return;
-    // }
-
-    try {
-      const response = await createUserWithEmailAndPassword(auth, 'ini@gmail.com', 'ini');
-      console.log(response);
-      navigation.navigate('Login');
-    } catch (error) {
+    if (value.email === "" || value.password === "") {
       setValue({
         ...value,
-        error: error.message,
-      })
+        error: "Email and password are mandatory.",
+      });
+      return;
+    }
+
+    try {
+      const response = await createUserWithEmailAndPassword(
+        auth,
+        value.email,
+        value.password
+      );
+
+      // console.log(response);
+      navigation.navigate("FirstName");
+    } catch (error) {
+      let message = "";
+      
+        // if(error instanceof FirebaseError){}
+        if(error.code === "auth/weak-password"){
+          message = "Enter a strong password of at least 6 characters.";
+        }
+        /**
+         * 
+         * https://firebase.google.com/docs/reference/js/auth#autherrorcodes
+         */
+        if(error.code === "auth/email-already-in-use"){
+          message = "Enter a strong password of at least 6 characters.";
+        }
+      setValue({
+        ...value,
+        error: message,
+      });
     }
   }
 
@@ -71,7 +88,7 @@ const LoginScreen = () => {
 
     try {
       await signInWithEmailAndPassword(auth, value.email, value.password);
-      navigation.navigate('Home');
+      navigation.navigate("Home");
     } catch (error) {
       setValue({
         ...value,
@@ -129,6 +146,7 @@ const LoginScreen = () => {
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
       <View style={styles.inputContainer}>
+        <Text>{value.error}</Text>
         <TextInput
           placeholder="Email"
           value={value.email}
