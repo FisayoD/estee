@@ -4,7 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-const SkinCareTipsScreen = () => {
+const CustomizeSkinScreen = () => {
   const navigation = useNavigation();
 
   const handleBack = async () => {
@@ -33,9 +33,13 @@ const SkinCareTipsScreen = () => {
   });
   return (
     <View style={styles.container}>
-      This should just be a note like file that lets you update it with skincare tips finito.
+      <TouchableOpacity onPress={handleBack} style={styles.button}>
+        <Text style={styles.buttonText}>Back</Text>
+      </TouchableOpacity>
+      {/* I want to be able to see routine and change it tbh not sure how to. */}
+    
     </View>
   );
 };
 
-export default SkinCareTipsScreen;
+export default CustomizeSkinScreen;

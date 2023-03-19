@@ -19,7 +19,7 @@ export default function App() {
     async function prepare() {
       try {
         await Font.loadAsync(Entypo.font);
-        await new Promise((resolve) => setTimeout(resolve, 2000));
+        await new Promise((resolve) => setTimeout(resolve, 500));
       } catch (e) {
         console.warn(e);
       } finally {
@@ -34,7 +34,9 @@ export default function App() {
     if (appIsReady) {
       await SplashScreen.hideAsync();
       console.log("hi");
-      navigation.replace("Login");
+      setTimeout(() => {
+        navigation.replace("Login");
+      }, 3000);
     }
   }, [appIsReady]);
 
