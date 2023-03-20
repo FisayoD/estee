@@ -9,7 +9,6 @@ import FirstNameScreen from './src/screens/FirstNameScreen.js';
 import MakeUpScreen from './src/screens/MakeUpScreen.js';
 import SkinCareScreen from './src/screens/SkinCareScreen.js';
 import BeautyTipsScreen from './src/screens/BeautyTipsScreen.js';
-import CustomizeSkinScreen from './src/screens/CustomizeSkinScreen.js';
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -25,7 +24,6 @@ export default function App() {
       <Stack.Screen name="MakeUp" component={MakeUpScreen} options={{headerShown: false}}/>
       <Stack.Screen name="SkinCare" component={SkinCareScreen} options={{headerShown: false}}/>
       <Stack.Screen name="BeautyTips" component={BeautyTipsScreen} options={{headerShown: false}}/>
-      <Stack.Screen name="CustomizeSKinSkin" component={CustomizeSkinScreen} options={{headerShown: false}}/>
     </Stack.Navigator>
   </NavigationContainer>
   );

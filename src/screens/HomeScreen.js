@@ -59,10 +59,10 @@ const HomeScreen = () => {
     },
     button: {
       backgroundColor: "#5A3315",
-      width: "60%",
-      padding: 15,
+      width: "50%",
+      padding: 10,
       borderRadius: 10,
-      marginTop: 40,
+      marginTop: 38,
       alignItems: "center",
     },
     buttonText: {
@@ -70,20 +70,24 @@ const HomeScreen = () => {
       fontWeight: "700",
       fontSize: 16,
     },
+    small: {
+      fontSize: 24,
+    },
+    big: {
+      fontSize: 36,
+      marginBottom: 26,
+    },
   });
   return (
     <View style={styles.container}>
       {/* email: {auth.currentUser?.email} */}
-      <Text>Hello {auth.currentUser?.displayName}</Text>
-      <Text>What would you want to do with Estee today?</Text>
+      <Text style ={styles.big}>Hello {auth.currentUser?.displayName},</Text>
+      <Text style ={styles.small}>What would you want to do with Estee today?</Text>
       <TouchableOpacity onPress={handleMakeUp} style={styles.button}>
           <Text style={styles.buttonText}>MakeUp</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={handleSkinCare} style={styles.button}>
           <Text style={styles.buttonText}>SkinCare</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={handleCustomizeSkin} style={styles.button}>
-          <Text style={styles.buttonText}>Customize Skincare</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={handleBeautyTips} style={styles.button}>
           <Text style={styles.buttonText}>Note beauty tips</Text>

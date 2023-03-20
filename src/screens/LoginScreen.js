@@ -111,7 +111,7 @@ const LoginScreen = () => {
       paddingHorizontal: 15,
       paddingVertical: 10,
       borderRadius: 10,
-      marginTop: 5,
+      marginTop: 8,
     },
     buttonContainer: {
       width: "60%",
@@ -126,6 +126,13 @@ const LoginScreen = () => {
       borderRadius: 10,
       alignItems: "center",
     },
+    button2: {
+      backgroundColor: "#ffffff",
+      width: "100%",
+      padding: 15,
+      borderRadius: 10,
+      alignItems: "center",
+    },
     buttonText: {
       color: "white",
       fontWeight: "700",
@@ -133,7 +140,7 @@ const LoginScreen = () => {
     },
     buttonOutline: {
       backgroundColor: "white",
-      marginTop: 5,
+      marginTop: 8,
       borderColor: "#5A3315",
       borderWidth: 2,
     },
@@ -142,9 +149,25 @@ const LoginScreen = () => {
       fontWeight: "700",
       fontSize: 16,
     },
+    inputContainer1: {
+      marginBottom: 10,
+    },
+    input2: {
+      color: "#5A3315",
+      fontWeight: "700",
+      fontSize: 26,
+    },
+    buttonText2: {
+      color: "#5A3315",
+      fontWeight: "600",
+      fontSize: 16,
+    }
   });
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
+      <View style={styles.inputContainer1}>
+        <Text style={styles.input2}>Let's get you In!</Text>
+      </View>
       <View style={styles.inputContainer}>
         <Text>{value.error}</Text>
         <TextInput
@@ -171,7 +194,7 @@ const LoginScreen = () => {
           onPress={handleSignUp}
           style={[styles.button, styles.buttonOutline]}
         >
-          <Text style={styles.button}>Register</Text>
+          <Text style={styles.buttonText2}>Register</Text>
         </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>

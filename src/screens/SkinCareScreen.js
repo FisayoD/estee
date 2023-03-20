@@ -1,14 +1,26 @@
+/** @format */
+
 import { useNavigation } from "@react-navigation/native";
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, TouchableOpacity, View, TextInput } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  TextInput,
+} from "react-native";
 import {
   collection,
-  addDoc, doc,
+  addDoc,
+  doc,
   onSnapshot,
   query,
   where,
-  orderBy, limit, Timestamp} from "firebase/firestore";
-  import { db, auth } from "../../firebase";
+  orderBy,
+  limit,
+  Timestamp,
+} from "firebase/firestore";
+import { db, auth } from "../../firebase";
 
 const AllStorage = () => {
   const [storage, setStorage] = useState([]);
@@ -26,8 +38,7 @@ const AllStorage = () => {
 
       querySnapshot.forEach((doc) => {
         const data = doc.data();
-        tempStorage.push({id:doc.id,...data});
-        
+        tempStorage.push({ id: doc.id, ...data });
       });
       setStorage(tempStorage);
     });
@@ -53,10 +64,18 @@ const AllStorage = () => {
     // };
     // fetchLastStorage();
   }, []);
+  const styles = StyleSheet.create({
+    big: {
+      fontSize: 22,
+      marginTop: 10,
+    },
+  });
   return (
     <View>
       {storage.map((item) => (
-        <Text key={item.id}>{item.storage}</Text>
+        <Text key={item.id} style={styles.big}>
+          {item.storage}
+        </Text>
       ))}
     </View>
   );
@@ -91,7 +110,7 @@ const SkinCareScreen = () => {
     let day = weekday[d.getDay()];
     let routine = [];
     if (curHr < 17 && curHr > 7) {
-      time = "Daytime sunshine emoji";
+      time = "Daytime 🌞";
     } else if (
       (curHr >= 18 && day == "Sunday") ||
       "Monday" ||
@@ -99,13 +118,13 @@ const SkinCareScreen = () => {
       "Thursday" ||
       "Saturday"
     ) {
-      time = "Evening moon emoji";
+      time = "Evening 🌙";
       routine = ["Cleanser", "Toner", "Serum", "Moisturizer"];
     } else if (curHr >= 18 && day == "Tuesday") {
-      time = "Evening moon emoji";
+      time = "Evening 🌙";
       routine = ["Cleanser", "Toner", "Serum", "Retinol", "Moisturizer"];
     } else {
-      time = "Evening moon emoji";
+      time = "Evening 🌙";
       routine = ["Cleanser", "Exfoliating Toner", "Serum", "Moisturizer"];
     }
     setDaily(routine);
@@ -116,13 +135,10 @@ const SkinCareScreen = () => {
     const docRef = await addDoc(collection(db, "storage"), {
       user: auth.currentUser?.uid,
       storage: storage,
-      storageTime: Timestamp.now()
+      storageTime: Timestamp.now(),
     });
-    setStorage('');
-    
+    setStorage("");
   };
-
-  
 
   const styles = StyleSheet.create({
     container: {
@@ -132,7 +148,7 @@ const SkinCareScreen = () => {
     },
     button: {
       backgroundColor: "#5A3315",
-      width: "60%",
+      width: "50%",
       padding: 15,
       borderRadius: 10,
       marginTop: 40,
@@ -145,17 +161,53 @@ const SkinCareScreen = () => {
     },
     inputContainer: {
       marginTop: 40,
-    }
+    },
+    buttonNavigate: {
+      width: "60%",
+      marginTop: -90,
+      marginLeft: -90,
+      alignItems: "left",
+      marginBottom: 70,
+    },
+    inputContainer: {
+      width: "80%",
+      marginTop: 74,
+    },
+    input: {
+      backgroundColor: "white",
+      paddingHorizontal: 15,
+      paddingVertical: 10,
+      borderRadius: 10,
+    },
+    small: {
+      fontSize: 18,
+      marginLeft: -200,
+      marginBottom: 10,
+    },
+    big: {
+      fontSize: 22,
+      marginBottom: 10,
+    },
+    medium: {
+      fontSize: 24,
+      marginBottom: 30,
+    },
   });
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={handleBack} style={styles.button}>
-        <Text style={styles.buttonText}>Back</Text>
-      </TouchableOpacity>
-      <Text>{clock}</Text>
-      <Text>Here is your skincare routine: </Text>
+      <View style={styles.buttonNavigate}>
+        <TouchableOpacity onPress={handleBack} style={styles.button}>
+          <Text style={styles.buttonText}>Back</Text>
+        </TouchableOpacity>
+      </View>
+      <Text style={styles.small}>{clock}</Text>
+      <Text style={styles.medium}>Here is your skincare routine: </Text>
       {daily.map((data, index) => {
-        return <Text key={index}>{data}</Text>;
+        return (
+          <Text key={index} style={styles.big}>
+            {data}
+          </Text>
+        );
       })}
 
       <View style={styles.inputContainer}>
@@ -177,15 +229,13 @@ const SkinCareScreen = () => {
         }}
         style={styles.button}
       >
-        <Text style={styles.buttonText}>Get Storage place.</Text>
+        <Text style={styles.buttonText}>Last Storage</Text>
       </TouchableOpacity>
 
       {isStorageShowing && <AllStorage />}
 
       {/* also remember we are also going to try to get the most recent
        item in the collection aka newly added document to enable user get the last place we st*/}
-
-      
     </View>
   );
 };

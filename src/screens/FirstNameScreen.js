@@ -51,7 +51,8 @@ updateProfile(auth.currentUser, {
       paddingHorizontal: 15,
       paddingVertical: 10,
       borderRadius: 10,
-      marginTop: 5,
+      marginTop: 26,
+      marginBottom: 24,
     },
     buttonContainer: {
       width: "60%",
@@ -59,9 +60,17 @@ updateProfile(auth.currentUser, {
       alignItems: "center",
       marginTop: 40,
     },
+    buttonNavigate: {
+      width: "60%",
+      marginTop: -250,
+      marginLeft: -80,
+      alignItems: "left",
+      marginBottom: 180,
+     
+    },
     button: {
       backgroundColor: "#5A3315",
-      width: "100%",
+      width: "59%",
       padding: 15,
       borderRadius: 10,
       alignItems: "center",
@@ -82,11 +91,21 @@ updateProfile(auth.currentUser, {
       fontWeight: "700",
       fontSize: 16,
     },
+    input2: {
+      color: "#5A3315",
+      fontWeight: "700",
+      fontSize: 18,
+    },
   });
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
+      <View style={styles.buttonNavigate}>
+        <TouchableOpacity onPress={handleGoToLogin} style={styles.button}>
+          <Text style={styles.buttonText}>Back</Text>
+        </TouchableOpacity>    
+      </View>
       <View style={styles.inputContainer}>
-        <Text>What would you like to be called?</Text>
+        <Text style={styles.input2}>What would you like to be called?</Text>
         <TextInput
           placeholder="Please enter name" value =  {firstname} onChangeText={(text) => setFirstname(text)}
           style={styles.input}
@@ -97,12 +116,7 @@ updateProfile(auth.currentUser, {
         
       </View>
 
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity onPress={handleGoToLogin} style={styles.button}>
-          <Text style={styles.buttonText}>Go To Login</Text>
-        </TouchableOpacity>
-        
-      </View>
+      
     </KeyboardAvoidingView>
   );
 };

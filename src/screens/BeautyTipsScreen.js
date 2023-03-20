@@ -1,6 +1,7 @@
 /** @format */
 
 import React, { useEffect, useState } from "react";
+import { useNavigation } from "@react-navigation/native";
 import {
   StyleSheet,
   View,
@@ -31,6 +32,17 @@ const styles = StyleSheet.create({
     marginTop: 40,
     alignItems: "center",
   },
+  button2: {
+   
+      backgroundColor: "#5A3315",
+      width: "60%",
+      padding: 15,
+      borderRadius: 10,
+      marginTop: 20,
+      marginBottom: 20,
+      alignItems: "center",
+   
+  },
   input: {
     backgroundColor: "white",
     paddingHorizontal: 15,
@@ -42,6 +54,25 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "700",
     fontSize: 16,
+  },
+  big: {
+    fontSize: 22,
+    marginBottom: 10,
+    marginTop: 200,
+  },
+  medium: {
+    fontSize: 24,
+    marginBottom: 30,
+  },
+  center: {
+    marginLeft: 15,
+    marginRight: 15,
+  },
+  buttonNavigate: {
+    width: "60%",
+    marginTop: 30,
+    alignItems: "left",
+    marginBottom: -30,
   },
 });
 const AllTips = () => {
@@ -77,7 +108,7 @@ const AllTips = () => {
   return (
     <View>
       {tips.map((item) => (
-        <Text key={item.id}>{item.tip}</Text>
+        <Text key={item.id} style={styles.medium}>{item.tip}</Text>
       ))}
     </View>
   );
@@ -86,6 +117,12 @@ const AllTips = () => {
 const BeautyTipsScreen = () => {
   const [tips, setTips] = useState("");
   const [isTipsShowing, setIsTipsShowing] = useState(false);
+  const navigation = useNavigation();
+
+
+  const handleBack = async () => {
+    navigation.navigate("Home");
+  };
 
   const handleSubmit = async () => {
     const docRef = await addDoc(collection(db, "tips"), {
@@ -97,8 +134,14 @@ const BeautyTipsScreen = () => {
 
   //   };
   return (
-    <View>
-      <Text>What new Skin Care Tip would you love to store?</Text>
+    <View style = {styles.center}>
+      <View style={styles.buttonNavigate}>
+        <TouchableOpacity onPress={handleBack} style={styles.button}>
+        <Text style={styles.buttonText}>Back</Text>
+      </TouchableOpacity>
+      </View>
+
+      <Text style={styles.big}>What new Skin Care Tip would you love to store?</Text>
       <TextInput
         placeholder="Please enter tip"
         value={tips}
@@ -112,7 +155,7 @@ const BeautyTipsScreen = () => {
         onPress={() => {
           setIsTipsShowing(true);
         }}
-        style={styles.button}
+        style={styles.button2}
       >
         <Text style={styles.buttonText}>Get all my Tips</Text>
       </TouchableOpacity>

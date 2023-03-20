@@ -71,8 +71,6 @@ const WelcomeScreen = () => {
         <TouchableOpacity onPress={handleGetStarted} style={styles.button}>
           <Text style={styles.buttonText}>Get Started</Text>
         </TouchableOpacity>
-         
-        
       </View>
     </KeyboardAvoidingView>
   );
