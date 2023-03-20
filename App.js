@@ -7,9 +7,9 @@ import LoginScreen from './src/screens/LoginScreen.js';
 import WelcomeScreen from './src/screens/WelcomeScreen.js';
 import FirstNameScreen from './src/screens/FirstNameScreen.js';
 import MakeUpScreen from './src/screens/MakeUpScreen.js';
-import SkinCareScreen from './src/screens/CustomizeSkinScreen.js';
+import SkinCareScreen from './src/screens/SkinCareScreen.js';
 import BeautyTipsScreen from './src/screens/BeautyTipsScreen.js';
-import CustomizeSkinScreen from './src/screens/SkinCareScreen.js';
+import CustomizeSkinScreen from './src/screens/CustomizeSkinScreen.js';
 
 export default function App() {
   const Stack = createNativeStackNavigator();

@@ -33,7 +33,7 @@ const CustomizeSkinScreen = () => {
   });
   return (
     <View style={styles.container}>
-      This should just be a note like file that lets you update it with skincare tips finito.
+      <Text>This should just be a note like file that lets you update it with skincare tips finito.</Text>
     </View>
   );
 };
