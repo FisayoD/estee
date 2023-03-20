@@ -1,9 +1,14 @@
-/** @format */
-
 import { useNavigation } from "@react-navigation/native";
-import React, {useState, useEffect} from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-
+import React, { useState, useEffect } from "react";
+import { StyleSheet, Text, TouchableOpacity, View, TextInput } from "react-native";
+import {
+  collection,
+  addDoc, doc,
+  onSnapshot,
+  query,
+  where,
+  orderBy, limit, Timestamp} from "firebase/firestore";
+  import { db, auth } from "../../firebase";
 
 const AllStorage = () => {
   const [storage, setStorage] = useState([]);
@@ -11,9 +16,10 @@ const AllStorage = () => {
   useEffect(() => {
     const q = query(
       collection(db, "storage"),
-      where("user", "==", auth.currentUser?.uid)
+      where("user", "==", auth.currentUser?.uid),
+      orderBy("storageTime", "desc"),
+      limit(1)
     );
-
 
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const tempStorage = [];
@@ -23,18 +29,30 @@ const AllStorage = () => {
         tempStorage.push({id:doc.id,...data});
         
       });
-
-       
-      setStorage(Storage);
+      setStorage(tempStorage);
     });
 
     return () => {
       unsubscribe();
     };
+
+    // const fetchLastStorage = async () => {
+    //   const docRef = doc(
+    //     collection(db, "storage"),
+    //     where("user", "==", auth.currentUser?.uid),
+    //     orderBy("storageTime"),
+    //     limit(1));
+    //   const docSnap = await getDoc(docRef);
+
+    //   if (docSnap.exists()) {
+    //     console.log("Document data:", docSnap.data());
+    //     setStorage(docSnap.data());
+    //   } else {
+    //     console.log("No such document!");
+    //   }
+    // };
+    // fetchLastStorage();
   }, []);
-
-  
-
   return (
     <View>
       {storage.map((item) => (
@@ -44,54 +62,67 @@ const AllStorage = () => {
   );
 };
 
-
 const SkinCareScreen = () => {
   const [daily, setDaily] = useState([]);
-  const [clock, setClock] = useState('');
+  const [clock, setClock] = useState("");
+  const [storage, setStorage] = useState("");
+  const [isStorageShowing, setIsStorageShowing] = useState(false);
   const navigation = useNavigation();
 
   const handleBack = async () => {
     navigation.navigate("Home");
   };
 
-  
   useEffect(() => {
     let today = new Date();
-  let curHr = today.getHours();
-  let time;
-  const weekday = [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-  ];
+    let curHr = today.getHours();
+    let time;
+    const weekday = [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+    ];
 
-  const d = new Date();
-  let day = weekday[d.getDay()];
-  let routine = [];
-  if (curHr < 17 && curHr > 7) {
-    time = "Daytime sunshine emoji";
-  } else if (curHr >= 18 && day == "Sunday"||"Monday"||"Wednesday"||"Thursday"||"Saturday"){
-    time = "Evening moon emoji";
-    routine = ["Cleanser", "Toner", "Serum", "Moisturizer"];
-  }
-  else if (curHr >= 18 && day == "Tuesday"){
-    time = "Evening moon emoji";
-    routine = ["Cleanser", "Toner", "Serum", "Retinol", "Moisturizer"];
-  }
-  else{
-    time = "Evening moon emoji";
-    routine = ["Cleanser", "Exfoliating Toner", "Serum", "Moisturizer"];
+    const d = new Date();
+    let day = weekday[d.getDay()];
+    let routine = [];
+    if (curHr < 17 && curHr > 7) {
+      time = "Daytime sunshine emoji";
+    } else if (
+      (curHr >= 18 && day == "Sunday") ||
+      "Monday" ||
+      "Wednesday" ||
+      "Thursday" ||
+      "Saturday"
+    ) {
+      time = "Evening moon emoji";
+      routine = ["Cleanser", "Toner", "Serum", "Moisturizer"];
+    } else if (curHr >= 18 && day == "Tuesday") {
+      time = "Evening moon emoji";
+      routine = ["Cleanser", "Toner", "Serum", "Retinol", "Moisturizer"];
+    } else {
+      time = "Evening moon emoji";
+      routine = ["Cleanser", "Exfoliating Toner", "Serum", "Moisturizer"];
+    }
+    setDaily(routine);
+    setClock(time);
+  }, []);
+
+  const handleSubmit = async () => {
+    const docRef = await addDoc(collection(db, "storage"), {
+      user: auth.currentUser?.uid,
+      storage: storage,
+      storageTime: Timestamp.now()
+    });
+    setStorage('');
     
-  }
-  setDaily(routine);
-  setClock(time);    
-  }, [])
+  };
+
   
- 
 
   const styles = StyleSheet.create({
     container: {
@@ -112,44 +143,49 @@ const SkinCareScreen = () => {
       fontWeight: "700",
       fontSize: 16,
     },
+    inputContainer: {
+      marginTop: 40,
+    }
   });
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={handleBack} style={styles.button}>
         <Text style={styles.buttonText}>Back</Text>
       </TouchableOpacity>
-      {/* I want to be able to see routine and change it tbh not sure how to. */}
       <Text>{clock}</Text>
       <Text>Here is your skincare routine: </Text>
       {daily.map((data, index) => {
-        return <Text key={index}>{data}</Text>
+        return <Text key={index}>{data}</Text>;
       })}
 
-
-       <View style={styles.inputContainer}>
+      <View style={styles.inputContainer}>
         <TextInput
           placeholder="Please enter storage place for your items."
-          value={value.email}
-          onChangeText={(text) => setValue({ ...value, email: text })}
+          value={storage}
+          onChangeText={(text) => setStorage(text)}
           style={styles.input}
         />
       </View>
 
+      <TouchableOpacity onPress={handleSubmit} style={styles.button}>
+        <Text style={styles.buttonText}>Submit</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        onPress={() => {
+          setIsStorageShowing(true);
+        }}
+        style={styles.button}
+      >
+        <Text style={styles.buttonText}>Get Storage place.</Text>
+      </TouchableOpacity>
+
+      {isStorageShowing && <AllStorage />}
+
       {/* also remember we are also going to try to get the most recent
        item in the collection aka newly added document to enable user get the last place we st*/}
 
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity onPress={handleLogin} style={styles.button}>
-          <Text style={styles.buttonText}>Login</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          onPress={handleSignUp}
-          style={[styles.button, styles.buttonOutline]}
-        >
-          <Text style={styles.button}>Register</Text>
-        </TouchableOpacity>
-      </View>
+      
     </View>
   );
 };

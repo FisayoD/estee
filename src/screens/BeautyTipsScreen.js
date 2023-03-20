@@ -15,6 +15,7 @@ import {
   onSnapshot,
   query,
   where,
+  FieldValue
 } from "firebase/firestore";
 const styles = StyleSheet.create({
   container: {
