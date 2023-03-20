@@ -4,7 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-const SkinCareTipsScreen = () => {
+const CustomizeSkinScreen = () => {
   const navigation = useNavigation();
 
   const handleBack = async () => {
@@ -38,4 +38,4 @@ const SkinCareTipsScreen = () => {
   );
 };
 
-export default SkinCareTipsScreen;
+export default CustomizeSkinScreen;
